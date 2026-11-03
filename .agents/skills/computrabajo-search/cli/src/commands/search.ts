@@ -2,6 +2,7 @@ import {
   buildSearchUrl,
   htmlFetch,
   parseJobCards,
+  stripInvisible,
   postedAgeDays,
   writeError,
   type JobCard,
@@ -32,7 +33,7 @@ function renderTable(cards: JobCard[]): string {
 export async function runSearch(opts: SearchOpts): Promise<number> {
   try {
     const html = await htmlFetch(buildSearchUrl(opts.query, opts.location, opts.page))
-    let cards = html ? parseJobCards(html) : []
+    let cards = html ? stripInvisible(parseJobCards(html)) : []
     if (opts.jobage !== undefined) {
       // Client-side: robots.txt disallows the portal's pubdate= parameter on offer
       // paths. Undated cards are kept, because a missing date is not evidence of age.

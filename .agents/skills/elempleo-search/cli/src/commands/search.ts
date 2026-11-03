@@ -2,6 +2,7 @@ import {
   buildSearchUrl,
   htmlFetch,
   parseJobCards,
+  stripInvisible,
   parseTotal,
   relativeAgeDays,
   writeError,
@@ -34,7 +35,7 @@ export async function runSearch(opts: SearchOpts): Promise<number> {
   try {
     const html = await htmlFetch(buildSearchUrl(opts.query, opts.location, opts.page))
     const total = html ? parseTotal(html) : null
-    let cards = html ? parseJobCards(html) : []
+    let cards = html ? stripInvisible(parseJobCards(html)) : []
     if (opts.jobage !== undefined) {
       // No server-side date filter on the public pages. Undated cards are kept:
       // a missing date is not evidence that a posting is old.

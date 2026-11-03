@@ -1,4 +1,4 @@
-import { BASE_URL, OFFER_BASE, htmlFetch, parseJobDetail, writeError } from "../helpers.js"
+import { BASE_URL, OFFER_BASE, htmlFetch, parseJobDetail, stripInvisible, writeError } from "../helpers.js"
 
 export interface DetailOpts {
   id: string
@@ -22,7 +22,7 @@ export async function runDetail(opts: DetailOpts): Promise<number> {
   }
   try {
     const html = await htmlFetch(url)
-    const job = html ? parseJobDetail(html, url) : null
+    const job = html ? stripInvisible(parseJobDetail(html, url)) : null
     if (!job) {
       writeError("Job not found", "NOT_FOUND")
       return 1
